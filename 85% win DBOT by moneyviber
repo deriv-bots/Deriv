@@ -1,0 +1,71 @@
+import pandas as pd
+import numpy as np
+import time
+
+# Function to calculate moving averages strategy signals
+def strategia_media_mobile(dati, finestra_breve=40, finestra_lunga=100):
+    segnali = pd.DataFrame(index=dati.index)
+    segnali['prezzo'] = dati['Close']
+    segnali['media_breve'] = dati['Close'].rolling(window=finestra_breve, min_periods=1).mean()
+    segnali['media_lunga'] = dati['Close'].rolling(window=finestra_lunga, min_periods=1).mean()
+    segnali['segnale'] = 0.0
+
+    segnali['segnale'][finestra_breve:] = np.where(segnali['media_breve'][finestra_breve:] > segnali['media_lunga'][finestra_breve:], 1.0, 0.0)
+    segnali['posizioni'] = segnali['segnale'].diff()
+    
+    return segnali
+
+# Function to calculate position size
+def calcola_dimensione_posizione(saldo_conto, rischio_per_trade):
+    return saldo_conto * rischio_per_trade
+
+# Function to apply risk management
+def applica_gestione_rischio(ingresso_trade, take_profit, stop_loss):
+    prezzo_tp = ingresso_trade * (1 + take_profit)
+    prezzo_sl = ingresso_trade * (1 - stop_loss)
+    return prezzo_tp, prezzo_sl
+
+# Mock function to simulate getting current price
+def get_current_price(simbolo):
+    # This function should be replaced with actual API call to get real-time prices
+    return np.random.uniform(100, 200)  # Example current price
+
+# Mock function to simulate placing a trade
+def esegui_trade(simbolo, lato, quantita):
+    # This function should be replaced with actual API call to place a trade
+    return {'status': 'success', 'symbol': simbolo, 'side': lato, 'quantity': quantita}
+
+# Main trading function
+def main():
+    saldo_conto = 1000  # Esempio di saldo
+    rischio_per_trade = 0.01  # Rischio 1% per trade
+    take_profit = 0.05  # 5% di take profit
+    stop_loss = 0.02  # 2% di stop loss
+
+    # Load your historical price data
+    dati = pd.read_csv('dati_prezzo.csv')
+    segnali = strategia_media_mobile(dati)
+
+    for index, row in segnali.iterrows():
+        if row['posizioni'] == 1.0:  # Segnale di acquisto
+            dimensione_posizione = calcola_dimensione_posizione(saldo_conto, rischio_per_trade)
+            prezzo_ingresso = row['prezzo']
+            prezzo_tp, prezzo_sl = applica_gestione_rischio(prezzo_ingresso, take_profit, stop_loss)
+            response = esegui_trade('BTCUSD', 'buy', dimensione_posizione)
+            print(f"Trade eseguito: {response}")
+
+            # Monitor the trade
+            while True:
+                prezzo_corrente = get_current_price('BTCUSD')
+                if prezzo_corrente >= prezzo_tp:
+                    print("Take profit raggiunto!")
+                    saldo_conto += dimensione_posizione * take_profit
+                    break
+                elif prezzo_corrente <= prezzo_sl:
+                    print("Stop loss raggiunto!")
+                    saldo_conto -= dimensione_posizione * stop_loss
+                    break
+                time.sleep(60)  # Check every minute
+
+if __name__ == "__main__":
+    main()
