@@ -80,7 +80,7 @@ There are over 40+ premium bots and strategies available  plus lifetime access t
 Step into a private trading community built for precision, profit, and elite strategy sharing.
 
 **𝐓𝐄𝐋𝐄𝐆𝐑𝐀𝐌:** [𝗖𝗟𝗜𝗖𝗞 𝗛𝗘𝗥𝗘](https://t.me/Deriv_Pro_Bots)  
-**𝐖𝐇𝐀𝐓𝐒𝐀𝐏𝐏:** [𝗖𝗟𝗜𝗖𝗞 𝗛𝗘𝗥𝗘](https://chat.whatsapp.com/IRaeFQiF7OFJwd4i2HBG3B)
+**𝐖𝐇𝐀𝐓𝐒𝐀𝐏𝐏:** [𝗖𝗟𝗜𝗖𝗞 𝗛𝗘𝗥𝗘](https://chat.whatsapp.com/KJYW3se0A7iBLX0WywEYDI)
 
 > Access premium bots, live strategy drops, and mentorship from top-tier traders.  
 > This isn’t just a group, it’s your edge.
